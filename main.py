@@ -11,15 +11,22 @@ python -m arcade.examples.sprite_collect_coins
 
 import random
 import arcade
+import pygame
+
 
 # --- Constants ---
-SPRITE_SCALING_PLAYER = 0.5
-SPRITE_SCALING_COIN = .25
-COIN_COUNT = 50
-
-SCREEN_WIDTH = 800
-SCREEN_HEIGHT = 600
+pygame.init()
+SCREEN_WIDTH = 700
+SCREEN_HEIGHT = 500
 SCREEN_TITLE = "Sprite Collect Coins Example"
+
+SPRITE_SCALING_PLAYER = 0.15
+SPRITE_Star_Coin = .05
+COIN_COUNT = 50
+path = "Star_coin.png"
+fondo = pygame.image.load("castillo.jpg")
+
+
 
 
 class MyGame(arcade.Window):
@@ -33,6 +40,7 @@ class MyGame(arcade.Window):
         # Variables that will hold sprite lists
         self.player_list = None
         self.coin_list = None
+        self.background = None
 
         # Set up the player info
         self.player_sprite = None
@@ -41,7 +49,8 @@ class MyGame(arcade.Window):
         # Don't show the mouse cursor
         self.set_mouse_visible(False)
 
-        arcade.set_background_color(arcade.color.AMAZON)
+
+
 
     def setup(self):
         """ Set up the game and initialize the variables. """
@@ -49,13 +58,15 @@ class MyGame(arcade.Window):
         # Sprite lists
         self.player_list = arcade.SpriteList()
         self.coin_list = arcade.SpriteList()
+        self.background = arcade.load_texture("castillo.jpg")
+
 
         # Score
         self.score = 0
 
         # Set up the player
         # Character image from kenney.nl
-        img = ":resources:images/animated_characters/female_person/femalePerson_idle.png"
+        img = "toadette.png"
         self.player_sprite = arcade.Sprite(img, SPRITE_SCALING_PLAYER)
         self.player_sprite.center_x = 50
         self.player_sprite.center_y = 50
@@ -65,9 +76,9 @@ class MyGame(arcade.Window):
         for i in range(COIN_COUNT):
 
             # Create the coin instance
-            # Coin image from kenney.nl
-            coin = arcade.Sprite(":resources:images/items/coinGold.png",
-                                 SPRITE_SCALING_COIN)
+            # Coin image from kenney.nlC
+            coin = arcade.Sprite(path,
+                                 SPRITE_Star_Coin)
 
             # Position the coin
             coin.center_x = random.randrange(SCREEN_WIDTH)
@@ -79,13 +90,15 @@ class MyGame(arcade.Window):
     def on_draw(self):
         """ Draw everything """
         self.clear()
+        arcade.draw_lrwh_rectangle_textured(0,0,SCREEN_WIDTH,SCREEN_HEIGHT,self.background)
+
         self.coin_list.draw()
         self.player_list.draw()
 
         # Put the text on the screen.
         output = f"Score: {self.score}"
         arcade.draw_text(text=output, start_x=10, start_y=20,
-                         color=arcade.color.WHITE, font_size=14)
+                         color=arcade.color.BLACK, font_size=14)
 
     def on_mouse_motion(self, x, y, dx, dy):
         """ Handle Mouse Motion """
